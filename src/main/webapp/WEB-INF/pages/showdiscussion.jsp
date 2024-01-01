@@ -90,7 +90,7 @@
     <h2>Description</h2>
     <hr>
     <div class="container d-flex justify-content-center align-items-center">
-        <pre><p>${discussion.description}</p></pre>
+        <pre style="white-space: pre-wrap;"><p>${discussion.description}</p></pre>
     </div>
 
     <div class="row justify-content-center">
@@ -122,7 +122,8 @@
             <div class="comment" style="margin-left:${comment.indentLevel}">
                     <span class="comment-author">${comment.author}</span>
                     <span class="comment-timestamp">${comment.timestamp}</span>
-                    <p>${comment.content}</p>
+                    <br><br><br>
+                    <pre style="white-space: pre-wrap;">${comment.content}</pre>
                 <c:if test="${pageContext.request.getRemoteUser() ne null && pageContext.request.getRemoteUser() ne ''}">
                     <div class="reply-button">
                         <button class="btn btn-primary" onclick="toggleReplyForm(event)">Reply</button>

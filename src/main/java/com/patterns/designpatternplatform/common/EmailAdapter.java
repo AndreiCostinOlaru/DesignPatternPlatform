@@ -6,13 +6,13 @@ public class EmailAdapter implements Notification {
     private final JavaMailSender javaMailSender;
 
     public EmailAdapter() {
-        this.javaMailSender = JavaMailSender.getInstance();
+        String username = "raid95885@gmail.com";
+        String password = "rlvssdfllbxeirxn";
+        this.javaMailSender = JavaMailSender.getInstance(username,password);
     }
 
     @Override
     public void sendNotification(String recipient, String subject, String message) {
-        String username = "raid95885@gmail.com";
-        String password = "rlvssdfllbxeirxn";
-        javaMailSender.sendEmail(username, password, recipient, subject, message);
+        javaMailSender.sendEmail(recipient, subject, message);
     }
 }

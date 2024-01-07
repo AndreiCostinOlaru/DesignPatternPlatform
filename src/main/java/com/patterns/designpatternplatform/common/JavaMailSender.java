@@ -9,34 +9,36 @@ import java.util.Properties;
 public class JavaMailSender {
 
     private static JavaMailSender instance;
+    private Session session;
 
-    private JavaMailSender() {
-    }
-
-    public static synchronized JavaMailSender getInstance() {
-        if (instance == null) {
-            instance = new JavaMailSender();
-        }
-        return instance;
-    }
-
-    public void sendEmail(String username, String password, String recipient, String subject, String message) {
+    private JavaMailSender(String username, String password) {
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
         props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+        props.put("mail.smtp.user", username);
 
-        Session session = Session.getInstance(props, new Authenticator() {
+        this.session = Session.getInstance(props, new Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
             }
         });
+    }
 
+    public static synchronized JavaMailSender getInstance(String username, String password) {
+        if (instance == null) {
+            instance = new JavaMailSender(username, password);
+        }
+        return instance;
+    }
+
+    public void sendEmail(String recipient, String subject, String message) {
         try {
-            Message emailMessage = new MimeMessage(session);
-            emailMessage.setFrom(new InternetAddress(username));
+            Message emailMessage = new MimeMessage(this.session);
+            String senderEmail = this.session.getProperties().getProperty("mail.smtp.user");
+            emailMessage.setFrom(new InternetAddress(this.session.getProperties().getProperty("mail.smtp.user")));
             emailMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
             emailMessage.setSubject(subject);
             emailMessage.setText(message);

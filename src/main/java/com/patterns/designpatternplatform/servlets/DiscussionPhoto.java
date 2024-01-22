@@ -21,14 +21,19 @@ public class DiscussionPhoto extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //retrieve discussion photo ID from the request parameters
         Long discussionPhotoId=Long.parseLong(request.getParameter("id"));
+        // Find the discussion photo using the PhotoBean
         DiscussionPhotoDto photo=photoBean.findDiscussionPhotosById(discussionPhotoId);
+        //check if the photo exists
         if(photo !=null){
+                //set response content type and length, then write the photo content to the response output stream
                 response.setContentType(photo.getFileType());
                 response.setContentLength(photo.getFileContent().length);
                 response.getOutputStream().write(photo.getFileContent());
             }
         else{
+            // if the photo is not found, send a 404 (Not Found) error
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }

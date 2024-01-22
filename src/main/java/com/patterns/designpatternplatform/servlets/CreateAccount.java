@@ -15,20 +15,21 @@ public class CreateAccount extends HttpServlet {
     UserBean userBean;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("userGroups", new String[] {"WRITE_DBOARDS", "WRITE_PATTERN"});
+        request.setAttribute("userGroups", new String[] {"WRITE_DBOARDS", "WRITE_PATTERN"}); // Set userGroups attribute for the JSP page and forward the request
         request.getRequestDispatcher("/WEB-INF/pages/createaccount.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Retrieve parameters from the form
         String username = request.getParameter("username");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        String[] userGroups = request.getParameterValues("user_groups");
+        String[] userGroups = request.getParameterValues("user_groups");//retrieve user groups as an array
         if (userGroups == null) {
             userGroups = new String[0];
         }
-        userBean.createUser(username, email, password, Arrays.asList(userGroups));
-        response.sendRedirect(request.getContextPath() + "/Login");
+        userBean.createUser(username, email, password, Arrays.asList(userGroups));//create a new user using the UserBean
+        response.sendRedirect(request.getContextPath() + "/Login");//redirect to the Login page after successfully creating the user
     }
 }

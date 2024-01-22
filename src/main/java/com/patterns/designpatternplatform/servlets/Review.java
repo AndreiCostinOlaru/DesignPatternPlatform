@@ -30,12 +30,15 @@ public class Review extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //retrieve review, user ID, and post ID from the form
         int review= Integer.parseInt(request.getParameter("review"));
         long userId= Long.parseLong(request.getParameter("userId"));
         long postId= Long.parseLong(request.getParameter("postId"));
-        if(review==0 || review==-1){
+        if(review==0 || review==-1){ //check if the review is a Like/Dislike (0 or -1)
 
-            likeDislikeReview.reviewPost(review,userId,postId);
+            likeDislikeReview.reviewPost(review,userId,postId);//review the post using LikeDislikeReview
+
+            //redirect to the appropriate page based on whether the review was already submitted
             if(likeDislikeReview.isAlreadySubmitted()){
                 response.sendRedirect(request.getContextPath() + "/ShowDiscussion?id=" + postId+"&msg=submitted");
             }
@@ -44,8 +47,9 @@ public class Review extends HttpServlet {
             }
         }
         else{
+            //review the post using StarReview
             starReview.reviewPost(review,userId,postId);
-            if(starReview.isAlreadySubmitted()){
+            if(starReview.isAlreadySubmitted()){//redirect to the appropriate page based on whether the review was already submitted
                 response.sendRedirect(request.getContextPath() + "/ShowPattern?id=" + postId+"&msg=submitted");
             }
             else {

@@ -25,16 +25,17 @@ public class ShowPattern extends HttpServlet {
     PatternBean patternBean;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //retrieve all users and set them as an attribute for the JSP page
         List<UserDto> users=userBean.findAllUsers();
         request.setAttribute("users",users);
-        Long patternId=Long.parseLong(request.getParameter("id"));
-        PatternDto pattern=patternBean.findById(patternId);
+        Long patternId=Long.parseLong(request.getParameter("id"));//retrieve pattern ID from the request parameters
+        PatternDto pattern=patternBean.findById(patternId); //retrieve pattern details and set them as an attribute for the JSP page
         request.setAttribute("pattern",pattern);
-        String message=request.getParameter("msg");
+        String message=request.getParameter("msg");//retrieve the message parameter from the request for display purposes
         if(message !=null && message.equals("submitted")){
             request.setAttribute("message","Already submitted a review!");
         }
-        request.getRequestDispatcher("/WEB-INF/pages/showpattern.jsp").forward(request,response);
+        request.getRequestDispatcher("/WEB-INF/pages/showpattern.jsp").forward(request,response);//forward the request to the showpattern.jsp page
     }
 
     @Override

@@ -30,7 +30,7 @@ public class CommentBean extends CommentComponent {
     CommentNotificationSystem commentNotificationSystem=new CommentNotificationSystem();
 
 
-    public List<CommentDto> copyCommentsToDto(List<Comment> commentList){
+    public List<CommentDto> copyCommentsToDto(List<Comment> commentList){//converts a list of comments into a list of commentDtos objects and registers the owners of the comments as observers
         List<CommentDto> commentDtos=new ArrayList<>();
         for(Comment comment:commentList){
             CommentDto commentDto=new CommentDto(comment.getId(),comment.getContent(),comment.getIndentLevel(),comment.getOwner().getUsername(),comment.getTimestamp(),comment.getReplies(),comment.getParentComment());
@@ -40,7 +40,7 @@ public class CommentBean extends CommentComponent {
         return commentDtos;
     }
 
-    public List<CommentDto> findRootCommentsById(long discussionId){
+    public List<CommentDto> findRootCommentsById(long discussionId){//finds root comments in the database using the id of the discussion and checking for null parent comments
         try {
             LOG.info("findAllComments");
             TypedQuery<Comment> typedQuery = entityManager.createQuery("SELECT d FROM Comment d WHERE d.discussion.id = :discussionId AND d.parentComment IS NULL", Comment.class);
@@ -53,7 +53,7 @@ public class CommentBean extends CommentComponent {
         }
     }
 
-    public void displayCommentThread(long discussionId) {
+    public void displayCommentThread(long discussionId) {//finds all comments in a discussion and prepares comments to be displayed
         comments.clear();
         List<CommentDto> commentList=findRootCommentsById(discussionId);
         for (CommentDto comment:commentList) {
@@ -61,7 +61,7 @@ public class CommentBean extends CommentComponent {
         }
     }
 
-    public void displayComment(CommentDto comment) {
+    public void displayComment(CommentDto comment) {//prepares comments to be displayed by adding indentation in a tree structure fashion
         comments.add(comment);
         List<CommentDto> replies=copyCommentsToDto(comment.getReplies());
         if (replies != null) {
@@ -78,7 +78,7 @@ public class CommentBean extends CommentComponent {
     }
 
     @Transactional
-    public void createComment(long discussionId, String content, long owner, Date timestamp, Long parentComment) {
+    public void createComment(long discussionId, String content, long owner, Date timestamp, Long parentComment) {// adds comment to the database based on input parameters
         LOG.info("createComment");
         Comment comment=new Comment();
         comment.setContent(content);

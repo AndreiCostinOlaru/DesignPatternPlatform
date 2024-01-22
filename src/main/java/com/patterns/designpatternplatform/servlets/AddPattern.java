@@ -27,26 +27,28 @@ public class AddPattern extends HttpServlet {
     PatternBean patternBean;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<UserDto> users=userBean.findAllUsers();
+        List<UserDto> users=userBean.findAllUsers(); //retrieve all users and set them as an attribute for the JSP page
         request.setAttribute("users",users);
-        request.getRequestDispatcher("/WEB-INF/pages/addpattern.jsp").forward(request,response);
+        request.getRequestDispatcher("/WEB-INF/pages/addpattern.jsp").forward(request,response);// forward the request to the addpattern.jsp page
+
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Retrieve parameters from the form
         String name=request.getParameter("patternName");
         String type=request.getParameter("patternType");
         String scope=request.getParameter("patternScope");
         String description=request.getParameter("description");
         String code=request.getParameter("code");
-
         long id=Long.parseLong(request.getParameter("owner_id"));
 
-        Pattern createdPattern=patternBean.createPattern(name, type, scope, id,description,code);
+        Pattern createdPattern=patternBean.createPattern(name, type, scope, id,description,code);// create a pattern using the PatternBean
 
+        // retrieve file parts from the request
         List<Part> fileParts = request.getParts().stream().filter(part -> "file".equals(part.getName())).collect(Collectors.toList());
 
-        for (Part filePart : fileParts) {
+        for (Part filePart : fileParts) {// process each file part and create a photo using the PhotoBean
             String fileName = filePart.getSubmittedFileName();
             String fileType = filePart.getContentType();
             long fileSize = filePart.getSize();
@@ -54,6 +56,7 @@ public class AddPattern extends HttpServlet {
             filePart.getInputStream().read(fileContent);
             photoBean.createPhoto(fileName,fileContent,fileType,createdPattern);
         }
+        //redirect to the Patterns page after successful creation
         response.sendRedirect(request.getContextPath() + "/Patterns");
     }
 }

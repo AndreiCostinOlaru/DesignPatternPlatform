@@ -10,19 +10,19 @@ public abstract class ReviewTemplate {
 
     public boolean recordSucces;
 
-    public final void reviewPost(int review, long userId, long postId) {
+    public final void reviewPost(int review, long userId, long postId) {// validate input, add to database and determine public opinion based on average rating
         validateInput(review);
         recordRating(review, userId, postId);
         calculateSentiment(averageRating(postId),postId);
     }
 
-    public abstract void validateInput(int review);
+    public abstract void validateInput(int review); // check if the review input is valid
 
-    public abstract void recordRating(int review, long userId, long postId);
+    public abstract void recordRating(int review, long userId, long postId); // add rating to database
 
-    public abstract double averageRating(long postId);
+    public abstract double averageRating(long postId); // calculate average rating
 
-    public abstract void calculateSentiment(double averageRating,long postId);
+    public abstract void calculateSentiment(double averageRating,long postId);// determine public opinion based on average rating
 
     public boolean isAlreadySubmitted() {
         return recordSucces;

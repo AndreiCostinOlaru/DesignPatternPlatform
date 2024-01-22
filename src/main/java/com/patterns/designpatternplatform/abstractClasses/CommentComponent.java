@@ -4,6 +4,6 @@ import com.patterns.designpatternplatform.common.CommentDto;
 
 public abstract class CommentComponent {
 
-    public abstract void displayComment(CommentDto comment);
+    public abstract void displayComment(CommentDto comment); //prepare comment to be displayed
 
 }

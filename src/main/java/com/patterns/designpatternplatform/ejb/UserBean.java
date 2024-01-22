@@ -30,7 +30,7 @@ public class UserBean {
     @Inject
     PasswordBean passwordBean;
 
-    public List<UserDto> copyusersToDto(List<User> users){
+    public List<UserDto> copyusersToDto(List<User> users){//converts a list of users into a list of userDtos
         List<UserDto> userDtos=new ArrayList<>();
         for(User user:users){
             UserDto userDto=new UserDto(user.getId(),user.getUsername(),user.getEmail(),user.getPassword());
@@ -39,7 +39,7 @@ public class UserBean {
         return userDtos;
     }
 
-    public List<UserDto> findAllUsers(){
+    public List<UserDto> findAllUsers(){//returns a list of UserDtos converted from a list of all the users from the database
         try {
             LOG.info("findAllusers");
             TypedQuery<User> typedQuery = entityManager.createQuery("SELECT c FROM User c", User.class);
@@ -50,7 +50,7 @@ public class UserBean {
             throw new EJBException(e);
         }
     }
-    public void createUser(String username, String email, String password, Collection<String> groups) {
+    public void createUser(String username, String email, String password, Collection<String> groups) {//adds a user to the database based on input
         LOG.info("createUser");
         User newUser = new User();
         newUser.setUsername(username);
@@ -61,12 +61,7 @@ public class UserBean {
         emailNotification.sendNotification(email, "Design Pattern Platform: Created Account Succesfully!", "Thank you for creating an account!");
         assignGroupsToUser(username, groups);
     }
-
-    public void receiveReplyNotification(User user,String replier,String reply){
-        Notification emailNotification = new EmailAdapter();
-        emailNotification.sendNotification(user.getEmail(), "Design Pattern Platform: Reply to your comment!", replier+" replied to your comment with:"+ reply);
-    }
-    private void assignGroupsToUser(String username, Collection<String> groups) {
+    private void assignGroupsToUser(String username, Collection<String> groups) {//assigns userGroups(permissions) to a user
         LOG.info("assignGroupsToUser");
         for (String group : groups) {
             UserGroup userGroup = new UserGroup();

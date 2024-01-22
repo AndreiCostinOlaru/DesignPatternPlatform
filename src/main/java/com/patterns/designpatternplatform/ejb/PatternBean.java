@@ -27,7 +27,7 @@ public class PatternBean {
     @Inject
     PhotoBean photoBean;
 
-    public List<PatternDto> copyPatternsToDto(List<Pattern> patterns){
+    public List<PatternDto> copyPatternsToDto(List<Pattern> patterns){//converts a list of patterns into a list of patternDtos
         List<PatternDto> patternDtos=new ArrayList<>();
         for(Pattern pattern:patterns){
             PatternDto patternDto=new PatternDto(pattern.getId(),pattern.getName(),pattern.getType(),pattern.getScope(),pattern.getOwner().getUsername(),photoBean.copyPatternPhotosToDto(pattern.getPhotos()),pattern.getDescription(),pattern.getCode(), pattern.getPublicOpinion());
@@ -36,7 +36,7 @@ public class PatternBean {
         return patternDtos;
     }
 
-    public List<PatternDto> findAllPatterns(){
+    public List<PatternDto> findAllPatterns(){//returns a list of PatternDtos converted from a list of all the patterns from the database
         try {
             LOG.info("findAllPatterns");
             TypedQuery<Pattern> typedQuery = entityManager.createQuery("SELECT c FROM Pattern c", Pattern.class);
@@ -49,7 +49,7 @@ public class PatternBean {
     }
 
     @Transactional
-    public Pattern createPattern(String name,String patternType,String patternScope, long id,String description,String code){
+    public Pattern createPattern(String name,String patternType,String patternScope, long id,String description,String code){ //adds a pattern to the database based on input
         LOG.info("createPattern");
 
         Pattern pattern=new Pattern();
@@ -67,7 +67,7 @@ public class PatternBean {
     }
 
 
-    public PatternDto findById(Long patternId) {
+    public PatternDto findById(Long patternId) {//finds a pattern in the database based on id and converts it to a patternDto
         TypedQuery<Pattern> typedQuery = entityManager.createQuery("SELECT p FROM Pattern p WHERE p.id = :patternId", Pattern.class);
         typedQuery.setParameter("patternId", patternId);
         Pattern pattern = typedQuery.getSingleResult();
@@ -76,7 +76,7 @@ public class PatternBean {
         return patternDto;
     }
 
-    public void updatePattern(String name, String type, String scope, long userId, long patternId, String description, String code) {
+    public void updatePattern(String name, String type, String scope, long userId, long patternId, String description, String code) {//update the fields of a discussion in the database
         LOG.info("updatePattern");
         Pattern pattern=entityManager.find(Pattern.class,patternId);
         pattern.setName(name);
@@ -92,7 +92,7 @@ public class PatternBean {
         pattern.setOwner(user);
     }
 
-    public void deletePatternsByIds(List<Long> patternIds) {
+    public void deletePatternsByIds(List<Long> patternIds) {//delete a list of patterns, alongside their reviews, discussions, and photos from the database based on id
         LOG.info("deletePatternsByIds");
 
         for (Long id : patternIds) {
@@ -115,17 +115,4 @@ public class PatternBean {
             entityManager.remove(pattern);
         }
     }
-
-    public List<PatternPhotoDto> findPhotosByPatternId(long patternId) {
-        List<PatternPhoto> photos = entityManager
-                .createQuery("SELECT p FROM PatternPhoto p where p.pattern.id = :id", PatternPhoto.class)
-                .setParameter("id", patternId)
-                .getResultList();
-        if (photos.isEmpty()) {
-            return null;
-        }
-        List<PatternPhoto> patternPhotos = photos; // the first element
-        return photoBean.copyPatternPhotosToDto(patternPhotos);
-    }
-
 }

@@ -17,14 +17,14 @@ public class StarReview extends ReviewTemplate {
     @PersistenceContext
     EntityManager entityManager;
     @Override
-    public void validateInput(int review) {
+    public void validateInput(int review) { //checks if the review input is valid
         if (review < 1 || review > 5) {
             throw new IllegalArgumentException("Stars should be between 1 and 5.");
         }
     }
     @Transactional
     @Override
-    public void recordRating(int review, long userId, long postId) {
+    public void recordRating(int review, long userId, long postId) {//checks if the user has already submitted a review on the pattern and, if not, adds the review to the database
         Pattern pattern=entityManager.find(Pattern.class, postId);
         User user=entityManager.find(User.class, userId);
         boolean hasSubmittedReview = user.getPatternReviews()
@@ -43,7 +43,7 @@ public class StarReview extends ReviewTemplate {
     }
 
     @Override
-    public double averageRating(long postId) {
+    public double averageRating(long postId) {//calculates average rating based on the number of stars
         try {
             TypedQuery<PatternReview> typedQuery = entityManager.createQuery("SELECT c FROM PatternReview c WHERE c.pattern.id=:patternId", PatternReview.class);
             typedQuery.setParameter("patternId",postId);
@@ -61,7 +61,7 @@ public class StarReview extends ReviewTemplate {
     }
 
     @Override
-    public void calculateSentiment(double averageRating, long postId) {
+    public void calculateSentiment(double averageRating, long postId) {// determines public opinion based on the average rating
         Pattern pattern=entityManager.find(Pattern.class,postId);
         if (averageRating >= 4.0) {
             pattern.setPublicOpinion("Positive");

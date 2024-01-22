@@ -19,15 +19,16 @@ public class PatternPhoto extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Long patternPhotoId=Long.parseLong(request.getParameter("id"));
-        PatternPhotoDto photo=photoBean.findPatternPhotosById(patternPhotoId);
+        Long patternPhotoId=Long.parseLong(request.getParameter("id"));//retrieve pattern photo ID from the request parameters
+        PatternPhotoDto photo=photoBean.findPatternPhotosById(patternPhotoId);//find the pattern photo using the PhotoBean
+        // check if the photo exists and set the response content type and length, then write the photo content to the response output stream
         if(photo !=null){
                 response.setContentType(photo.getFileType());
                 response.setContentLength(photo.getFileContent().length);
                 response.getOutputStream().write(photo.getFileContent());
             }
         else{
-            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            response.sendError(HttpServletResponse.SC_NOT_FOUND); // if the photo is not found, send a 404 (Not Found) error
         }
     }
 

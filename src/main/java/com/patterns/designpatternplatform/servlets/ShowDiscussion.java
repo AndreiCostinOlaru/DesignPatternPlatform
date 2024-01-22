@@ -34,25 +34,30 @@ public class ShowDiscussion extends HttpServlet {
     UserBean userBean;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //retrieve all users and set them as an attribute for the JSP page
         List<UserDto> users=userBean.findAllUsers();
         request.setAttribute("users",users);
-        Long discussionId=Long.parseLong(request.getParameter("id"));
-        commentBean.displayCommentThread(discussionId);
-        List<CommentDto> comments=commentBean.getComments();
+        Long discussionId=Long.parseLong(request.getParameter("id"));//retrieve discussion ID from the request parameters
+        commentBean.displayCommentThread(discussionId);//display the comment thread for the discussion
+        List<CommentDto> comments=commentBean.getComments(); //retrieve comments and set them as an attribute for the JSP page
         if (comments != null && !comments.isEmpty()) {
             request.setAttribute("comments", comments);
         }
+
+        // retrieve discussion details and set them as an attribute for the JSP page
         DiscussionDto discussion=discussionBean.findById(discussionId);
         request.setAttribute("discussion",discussion);
+        // retrieve pattern details and set them as an attribute for the JSP page
         List<Pattern> patternList=new ArrayList<>();
         patternList.add(discussion.getPattern());
         PatternDto patternDto=patternBean.copyPatternsToDto(patternList).get(0);
         request.setAttribute("pattern",patternDto);
+        // retrieve the message parameter from the request for display purposes
         String message=request.getParameter("msg");
         if(message !=null && message.equals("submitted")){
             request.setAttribute("message","Already submitted a review!");
         }
-        request.getRequestDispatcher("/WEB-INF/pages/showdiscussion.jsp").forward(request,response);
+        request.getRequestDispatcher("/WEB-INF/pages/showdiscussion.jsp").forward(request,response); //forward the request to the showdiscussion.jsp page
     }
 
     @Override

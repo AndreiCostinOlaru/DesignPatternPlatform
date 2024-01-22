@@ -3,7 +3,7 @@ package com.patterns.designpatternplatform.entities;
 import jakarta.persistence.*;
 
 @Entity
-public class PatternPhoto {
+public class PatternPhoto{
 
     Long id;
     String filename;

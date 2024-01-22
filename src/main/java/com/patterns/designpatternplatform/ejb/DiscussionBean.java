@@ -27,7 +27,7 @@ public class DiscussionBean {
     @Inject
     PhotoBean photoBean;
 
-    public List<DiscussionDto> copyDiscussionsToDto(List<Discussion> discussions){
+    public List<DiscussionDto> copyDiscussionsToDto(List<Discussion> discussions){//converts a list of discussions into a list of discussionDtos
         List<DiscussionDto> discussionDtos=new ArrayList<>();
         for(Discussion discussion:discussions){
             DiscussionDto discussionDto=new DiscussionDto(discussion.getId(),discussion.getName(),discussion.getPattern(),discussion.getOwner().getUsername(),photoBean.copyDiscussionPhotosToDto(discussion.getPhotos()),discussion.getDescription(),discussion.getCode(), discussion.getPublicOpinion());
@@ -36,7 +36,7 @@ public class DiscussionBean {
         return discussionDtos;
     }
 
-    public List<DiscussionDto> findAllDiscussions(){
+    public List<DiscussionDto> findAllDiscussions(){//returns a list of DiscussionDtos converted from a list of all the discussions from the database
         try {
             LOG.info("findAllDiscussions");
             TypedQuery<Discussion> typedQuery = entityManager.createQuery("SELECT c FROM Discussion c", Discussion.class);
@@ -49,7 +49,7 @@ public class DiscussionBean {
     }
 
     @Transactional
-    public Discussion createDiscussion(String name, long userId,long patternId,String description,String code){
+    public Discussion createDiscussion(String name, long userId,long patternId,String description,String code){//adds a discussion to the database based on input
         LOG.info("createDiscussion");
 
         Discussion discussion=new Discussion();
@@ -69,7 +69,7 @@ public class DiscussionBean {
     }
 
 
-    public DiscussionDto findById(Long discussionId) {
+    public DiscussionDto findById(Long discussionId) {//finds a discussion in the database based on id and converts it to a discussionDto
         TypedQuery<Discussion> typedQuery = entityManager.createQuery("SELECT d FROM Discussion d WHERE d.id = :discussionId", Discussion.class);
         typedQuery.setParameter("discussionId", discussionId);
         Discussion discussion = typedQuery.getSingleResult();
@@ -78,7 +78,7 @@ public class DiscussionBean {
         return discussionDto;
     }
 
-    public void updateDiscussion(String name,long discussionId, String description, String code, long patternId) {
+    public void updateDiscussion(String name,long discussionId, String description, String code, long patternId) {//update the fields of a discussion in the database
         LOG.info("updateDiscussion");
         Discussion discussion=entityManager.find(Discussion.class,discussionId);
         discussion.setName(name);
@@ -91,7 +91,7 @@ public class DiscussionBean {
         discussion.setPattern(pattern);
     }
 
-    public void deleteDiscussionsByIds(List<Long> discussionsIds) {
+    public void deleteDiscussionsByIds(List<Long> discussionsIds) {//delete a list of discussions, alongside their reviews, photos and comments from the database based on id
         LOG.info("deleteDiscussionsByIds");
 
         for(Long id:discussionsIds){

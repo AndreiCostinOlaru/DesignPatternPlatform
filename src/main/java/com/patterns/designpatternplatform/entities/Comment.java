@@ -70,7 +70,7 @@ public class Comment {
     public void setReplies(List<Comment> replies) {
         this.replies = replies;
     }
-    @Temporal(TemporalType.TIMESTAMP) // Specify TemporalType for timestamp
+    @Temporal(TemporalType.TIMESTAMP)
     public Date getTimestamp() {
         return timestamp;
     }

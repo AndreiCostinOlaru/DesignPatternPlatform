@@ -14,7 +14,7 @@ public class CommentNotificationSystem implements CommentSubject {
         comments = new HashMap<>();
     }
     @Override
-    public void registerObserver(CommentObserver observer, long userId) {
+    public void registerObserver(CommentObserver observer, long userId) { // add observer to observer list
         System.out.println("Registering " + observer + " with id: " + userId);
         if (!observers.containsKey(userId)) {
             System.out.println("Completely registered " + observer + " with id: " + userId);
@@ -25,7 +25,7 @@ public class CommentNotificationSystem implements CommentSubject {
     }
 
     @Override
-    public void removeObserver(CommentObserver observer, long userId) {
+    public void removeObserver(CommentObserver observer, long userId) { // remove observer from observer list
         System.out.println("Removing " + observer + " with id: " + userId);
         CommentObserver registeredObserver = observers.get(userId);
         if (registeredObserver != null && registeredObserver.equals(observer)) {
@@ -37,7 +37,7 @@ public class CommentNotificationSystem implements CommentSubject {
 
 
     @Override
-    public void notifyCommentObservers(String reply, long userId, String replier) {
+    public void notifyCommentObservers(String reply, long userId, String replier) { //notifies the registered comment observer about a reply to a comment.
         System.out.println("Notified " + userId + " because: " + replier + " replied " + reply);
         comments.computeIfAbsent(userId, k -> new ArrayList<>()).add(reply);
         CommentObserver userObserver = observers.get(userId);

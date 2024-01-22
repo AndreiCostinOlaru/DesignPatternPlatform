@@ -26,22 +26,26 @@ public class Patterns extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //retrieve all patterns and set them as an attribute for the JSP page
         List<PatternDto> patterns=patternBean.findAllPatterns();
         request.setAttribute("patterns",patterns);
-        request.getRequestDispatcher("/WEB-INF/pages/patterns.jsp").forward(request,response);
+        request.getRequestDispatcher("/WEB-INF/pages/patterns.jsp").forward(request,response); //forward the request to the patterns.jsp page
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //retrieve pattern IDs from the form
         String[] patternIdStrings= request.getParameterValues("pattern_ids");
+        //check if pattern IDs are present in the request, convert pattern ID strings to long and add to the list
         if(patternIdStrings != null){
             List<Long> patternIds = new ArrayList<>();
             for(String id: patternIdStrings){
                 patternIds.add(Long.parseLong(id));
             }
-            patternBean.deletePatternsByIds(patternIds);
 
+            patternBean.deletePatternsByIds(patternIds);//delete patterns by their IDs using PatternBean
         }
-        response.sendRedirect(request.getContextPath()+"/Patterns");
+        response.sendRedirect(request.getContextPath()+"/Patterns");//redirect to the Patterns page after successful deletion
+
     }
 }

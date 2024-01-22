@@ -28,21 +28,24 @@ public class Discussions extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<DiscussionDto> discussions=discussionBean.findAllDiscussions();
+        List<DiscussionDto> discussions=discussionBean.findAllDiscussions(); //retrieve all discussions and set them as an attribute for the JSP page
         request.setAttribute("discussions",discussions);
-        request.getRequestDispatcher("/WEB-INF/pages/discussions.jsp").forward(request,response);
+        request.getRequestDispatcher("/WEB-INF/pages/discussions.jsp").forward(request,response);//forward the request to the discussions.jsp page
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String[] discussionIdStrings= request.getParameterValues("discussion_ids");
+        String[] discussionIdStrings= request.getParameterValues("discussion_ids");//retrieve discussion IDs from the form
+
+        // check if discussion IDs are provided
         if(discussionIdStrings != null){
             List<Long> discussionIds = new ArrayList<>();
             for(String id: discussionIdStrings){
-                discussionIds.add(Long.parseLong(id));
+                discussionIds.add(Long.parseLong(id)); //convert string IDs to long and add them to the list
             }
-            discussionBean.deleteDiscussionsByIds(discussionIds);
+            discussionBean.deleteDiscussionsByIds(discussionIds);//delete discussions by their IDs using the DiscussionBean
         }
-        response.sendRedirect(request.getContextPath()+"/Discussions");
+        response.sendRedirect(request.getContextPath()+"/Discussions");//redirect to the Discussions page after successful deletion
+
     }
 }

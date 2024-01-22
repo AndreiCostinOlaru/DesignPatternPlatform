@@ -105,7 +105,7 @@ public class User implements CommentObserver{
     }
 
     @Override
-    public void update(String reply, String replier) {
+    public void update(String reply, String replier) {// user observer is updated by sending an email notification based on the input from the notification(reply and replier)
         Notification emailNotification = new EmailAdapter();
         emailNotification.sendNotification(this.getEmail(), "Design Pattern Platform: Reply to your comment!", replier+" replied to your comment with:"+ reply);
     }

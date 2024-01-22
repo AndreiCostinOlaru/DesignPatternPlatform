@@ -20,9 +20,9 @@ public class Index extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<PatternDto> patterns=patternBean.findAllPatterns();
+        List<PatternDto> patterns=patternBean.findAllPatterns();//retrieve all patterns and set them as an attribute for the JSP page
         request.setAttribute("patterns",patterns);
-        request.getRequestDispatcher("/index.jsp").forward(request,response);
+        request.getRequestDispatcher("/index.jsp").forward(request,response);//forward the request to the index.jsp page
     }
 
     @Override

@@ -28,6 +28,7 @@ public class CommentService extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //retrieve parameters from the form
         long discussionId = Long.parseLong(request.getParameter("discussionId"));
         String content = request.getParameter("content");
         long owner = Long.parseLong(request.getParameter("owner"));
@@ -35,12 +36,13 @@ public class CommentService extends HttpServlet {
         String parentCommentString = request.getParameter("parentComment");
         Long parentComment = null;
 
+        // check if a parent comment ID is provided
         if (parentCommentString != null && !parentCommentString.isEmpty()) {
             parentComment = Long.parseLong(parentCommentString);
         }
+        commentBean.createComment(discussionId, content, owner, timestamp, parentComment);//create a new comment using the CommentBean
+        response.sendRedirect(request.getContextPath() + "/ShowDiscussion?id=" + discussionId); //redirect to the ShowDiscussion page after successfully creating the comment
 
-        commentBean.createComment(discussionId, content, owner, timestamp, parentComment);
-        response.sendRedirect(request.getContextPath() + "/ShowDiscussion?id=" + discussionId);
     }
 
 }

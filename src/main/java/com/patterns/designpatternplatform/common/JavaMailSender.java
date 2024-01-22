@@ -11,7 +11,7 @@ public class JavaMailSender {
     private static JavaMailSender instance;
     private Session session;
 
-    private JavaMailSender(String username, String password) {
+    private JavaMailSender(String username, String password) {// sets up the necessary properties for connecting to a gmail smtp server and initializes the instance with the specified credentials
         Properties props = new Properties();
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
@@ -27,14 +27,14 @@ public class JavaMailSender {
         });
     }
 
-    public static synchronized JavaMailSender getInstance(String username, String password) {
+    public static synchronized JavaMailSender getInstance(String username, String password) { // checks if instance was already initialized, if not it is initialized
         if (instance == null) {
             instance = new JavaMailSender(username, password);
         }
         return instance;
     }
 
-    public void sendEmail(String recipient, String subject, String message) {
+    public void sendEmail(String recipient, String subject, String message) { // sends email to the specified recipient, having the specified subject and message
         try {
             Message emailMessage = new MimeMessage(this.session);
             String senderEmail = this.session.getProperties().getProperty("mail.smtp.user");

@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 @Stateless
 public class PasswordBean {
     private static final Logger LOG = Logger.getLogger(PasswordBean.class.getName());
-    public String convertToSha256(String password) {
+    public String convertToSha256(String password) {//convert a password using the Sha256 algorithm
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
             messageDigest.update(password.getBytes(StandardCharsets.UTF_8));

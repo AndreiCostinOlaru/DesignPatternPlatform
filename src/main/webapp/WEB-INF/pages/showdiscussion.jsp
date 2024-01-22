@@ -120,9 +120,9 @@
     <c:if test="${comments ne null}">
         <c:forEach items="${comments}" var="comment">
             <div class="comment" style="margin-left:${comment.indentLevel}">
-                    <span class="comment-author">${comment.author}</span>
-                    <span class="comment-timestamp">${comment.timestamp}</span>
-                    <br><br><br>
+                    <strong class="comment-author d-block text-gray-dark">${comment.author}</strong>
+                    <strong class="comment-timestamp d-block text-gray-dark">${comment.timestamp}</strong>
+                    <br>
                     <pre style="white-space: pre-wrap;">${comment.content}</pre>
                 <c:if test="${pageContext.request.getRemoteUser() ne null && pageContext.request.getRemoteUser() ne ''}">
                     <div class="reply-button">

@@ -6,7 +6,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class DiscussionPhoto {
+public class DiscussionPhoto{
     Long id;
     String filename;
     String fileType;

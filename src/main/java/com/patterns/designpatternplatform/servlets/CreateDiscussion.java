@@ -30,15 +30,17 @@ public class CreateDiscussion extends HttpServlet {
     DiscussionBean discussionBean;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //Retrieve all users and patterns, set them as attributes for the JSP page
         List<UserDto> users=userBean.findAllUsers();
         List<PatternDto> patterns=patternBean.findAllPatterns();
         request.setAttribute("patterns",patterns);
         request.setAttribute("users",users);
-        request.getRequestDispatcher("/WEB-INF/pages/adddiscussion.jsp").forward(request,response);
+        request.getRequestDispatcher("/WEB-INF/pages/adddiscussion.jsp").forward(request,response);//forward the request to the adddiscussion.jsp page
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Retrieve parameters from the form
         String name=request.getParameter("discussionName");
         String scope=request.getParameter("patternScope");
         String description=request.getParameter("description");
@@ -47,8 +49,10 @@ public class CreateDiscussion extends HttpServlet {
         long patternId=Long.parseLong(request.getParameter("pattern"));
         long userId=Long.parseLong(request.getParameter("owner_id"));
 
+        // Create a discussion using the DiscussionBean
         Discussion createdDiscussion=discussionBean.createDiscussion(name,userId,patternId,description,code);
 
+        // Retrieve file parts from the request and process each file part to create a photo using the PhotoBean
         List<Part> fileParts = request.getParts().stream().filter(part -> "file".equals(part.getName())).collect(Collectors.toList());
 
         for (Part filePart : fileParts) {
@@ -59,6 +63,7 @@ public class CreateDiscussion extends HttpServlet {
             filePart.getInputStream().read(fileContent);
             photoBean.createPhoto(fileName,fileContent,fileType,createdDiscussion);
         }
-        response.sendRedirect(request.getContextPath() + "/Discussions");
+
+        response.sendRedirect(request.getContextPath() + "/Discussions");//redirect to the Discussions page after successful creation
     }
 }

@@ -10,9 +10,9 @@ import java.io.IOException;
 public class Logout extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.logout();
-        request.getSession().invalidate();
-        response.sendRedirect(request.getContextPath());
+        request.logout();//log out the current user
+        request.getSession().invalidate();//invalidate the session to clear user-related data
+        response.sendRedirect(request.getContextPath());// redirect to the application's context root
     }
 
     @Override

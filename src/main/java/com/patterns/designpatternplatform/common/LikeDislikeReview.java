@@ -16,14 +16,14 @@ public class LikeDislikeReview extends ReviewTemplate {
     @PersistenceContext
     EntityManager entityManager;
     @Override
-    public void validateInput(int review) {
+    public void validateInput(int review) { //checks if the review input is valid
         if (review != 0 && review != -1) {
             throw new IllegalArgumentException("Input should be either 0 (like) or -1 (dislike).");
         }
     }
     @Transactional
     @Override
-    public void recordRating(int review, long userId, long postId) {
+    public void recordRating(int review, long userId, long postId) {//checks if the user has already submitted a review on the discussion and, if not, adds the review to the database
         Discussion discussion=entityManager.find(Discussion.class, postId);
         User user=entityManager.find(User.class, userId);
         boolean hasSubmittedReview = user.getDiscussionReviews()
@@ -41,7 +41,7 @@ public class LikeDislikeReview extends ReviewTemplate {
     }
 
     @Override
-    public double averageRating(long postId) {
+    public double averageRating(long postId) {//calculates average rating as a sum where likes are considered 1 and dislikes -1
         try {
             TypedQuery<DiscussionReview> typedQuery = entityManager.createQuery("SELECT c FROM DiscussionReview c WHERE c.discussion.id=:discussionId", DiscussionReview.class);
             typedQuery.setParameter("discussionId",postId);
@@ -63,7 +63,7 @@ public class LikeDislikeReview extends ReviewTemplate {
     }
 
     @Override
-    public void calculateSentiment(double averageRating,long postId) {
+    public void calculateSentiment(double averageRating,long postId) { // determines public opinion based on the average rating
         Discussion discussion=entityManager.find(Discussion.class,postId);
         if (averageRating > 0) {
             discussion.setPublicOpinion("Positive");
